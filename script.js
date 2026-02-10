@@ -27,14 +27,6 @@ const todayDateBtnEl = document.getElementById("todayDateBtn");
 const SUPPORTED_MODELS = ["iphone-12", "iphone-13", "iphone-14", "iphone-15", "iphone-16", "iphone-17"];
 let pickerYear = 0;
 let pickerMonth = 0;
-const MODEL_SCREEN = {
-  "iphone-12": { width: 1170, height: 2532 },
-  "iphone-13": { width: 1170, height: 2532 },
-  "iphone-14": { width: 1170, height: 2532 },
-  "iphone-15": { width: 1179, height: 2556 },
-  "iphone-16": { width: 1179, height: 2556 },
-  "iphone-17": { width: 1179, height: 2556 }
-};
 
 function toISO(date) {
   const y = date.getFullYear();
@@ -181,17 +173,13 @@ function render(startISO) {
 }
 
 function buildShareUrl({ start, title, model }) {
-  const safeModel = MODEL_SCREEN[model] ? model : "iphone-15";
-  const size = MODEL_SCREEN[safeModel];
-  const target = new URL("/", window.location.origin);
-  target.searchParams.set("start", start);
+  const next = new URL("/api/wallpaper.png", window.location.origin);
+  next.searchParams.set("start", start);
   if ((title || "").trim()) {
-    target.searchParams.set("title", title.trim());
+    next.searchParams.set("title", title.trim());
   }
-  target.searchParams.set("model", safeModel);
-  target.searchParams.set("wallpaper", "1");
-  target.searchParams.set("safe", "0");
-  return `https://image.thum.io/get/png/noanimate/width/${size.width}/crop/${size.height}/${target.toString()}`;
+  next.searchParams.set("model", model || "iphone-15");
+  return next.toString();
 }
 
 function applyFormToPreview() {
