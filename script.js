@@ -172,17 +172,13 @@ function render(startISO) {
   }
 }
 
-function buildShareUrl({ start, title, model, safe }) {
-  const next = new URL(window.location.href);
+function buildShareUrl({ start, title, model }) {
+  const next = new URL("/api/wallpaper.png", window.location.origin);
   next.searchParams.set("start", start);
   if ((title || "").trim()) {
     next.searchParams.set("title", title.trim());
-  } else {
-    next.searchParams.delete("title");
   }
   next.searchParams.set("model", model || "iphone-15");
-  next.searchParams.set("safe", safe ? "1" : "0");
-  next.searchParams.set("wallpaper", "1");
   return next.toString();
 }
 
@@ -244,8 +240,7 @@ function bindSetupEvents(defaultModel) {
     const url = buildShareUrl({
       title: goalInputEl.value,
       start: safeStart,
-      model: modelInputEl?.value || defaultModel,
-      safe: safeZoneToggleEl?.checked ?? true
+      model: modelInputEl?.value || defaultModel
     });
     urlOutputEl.value = url;
   });
@@ -278,7 +273,7 @@ function init() {
     startInputEl.value = start;
     modelInputEl.value = model;
     if (safeZoneToggleEl) safeZoneToggleEl.checked = safe;
-    urlOutputEl.value = buildShareUrl({ start, title, model, safe });
+    urlOutputEl.value = buildShareUrl({ start, title, model });
     bindSetupEvents(model);
   }
 }
