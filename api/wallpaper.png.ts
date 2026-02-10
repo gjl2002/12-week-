@@ -63,6 +63,29 @@ export default function handler(req: Request) {
   const model = MODEL_SIZE[modelParam] ? modelParam : "iphone-15";
   const size = MODEL_SIZE[model];
 
+  if (debug) {
+    return new ImageResponse(
+      h(
+        "div",
+        {
+          style: {
+            width: size.width,
+            height: size.height,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "#111315",
+            color: "#ff7f39",
+            fontSize: 96,
+            fontFamily: "ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+          }
+        },
+        "API OK"
+      ),
+      { width: size.width, height: size.height }
+    );
+  }
+
   const startISO = /^\d{4}-\d{2}-\d{2}$/.test(startParam)
     ? startParam
     : toISO(getMonday(new Date()));
