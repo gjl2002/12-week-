@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>12周圆点日历</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="panel setup" id="setupPanel">
+        <h1>Installation Steps</h1>
+        <p class="setup-sub">1. 调参数 2. 复制链接 3. 粘贴到 iOS 快捷指令的 Get Contents of URL</p>
+
+        <label for="startInput">Start Date (第1周周一)</label>
+        <div class="date-row">
+          <input id="startInput" type="text" readonly placeholder="YYYY-MM-DD" />
+          <button id="pickDateBtn" type="button">选日期</button>
+        </div>
+
+        <label for="goalInput">Period Title（可选）</label>
+        <input id="goalInput" type="text" placeholder="e.g. 2026 Q1 · 12 Week Season" />
+
+        <label for="modelInput">iPhone Model</label>
+        <select id="modelInput">
+          <option value="iphone-12">iPhone 12 / 12 Pro</option>
+          <option value="iphone-13">iPhone 13 / 13 Pro</option>
+          <option value="iphone-14">iPhone 14 / 14 Pro</option>
+          <option value="iphone-15" selected>iPhone 15 / 15 Pro</option>
+          <option value="iphone-16">iPhone 16 / 16 Pro</option>
+          <option value="iphone-17">iPhone 17 / 17 Pro</option>
+        </select>
+
+        <label class="toggle-row" for="safeZoneToggle">
+          <input id="safeZoneToggle" type="checkbox" checked />
+          <span>显示锁屏安全区参考（仅预览）</span>
+        </label>
+
+        <button id="buildLinkBtn" type="button">生成壁纸链接</button>
+
+        <label for="urlOutput">Shortcut URL</label>
+        <div class="url-row">
+          <input id="urlOutput" type="text" readonly />
+          <button id="copyBtn" type="button">复制</button>
+        </div>
+      </section>
+
+      <section class="app panel" id="previewPanel">
+        <p class="season-name" id="seasonName">12 Week Season</p>
+        <p class="range" id="rangeText">2025.12.29 - 2026.03.22</p>
+        <section class="dot-board" id="dotBoard"></section>
+        <p class="progress-line" id="progressLine">64d left · 28%</p>
+        <div class="safe-zone-guide" id="safeZoneGuide"></div>
+      </section>
+    </main>
+
+    <section class="date-modal" id="dateModal" aria-hidden="true">
+      <div class="date-modal-card">
+        <div class="date-modal-head">
+          <button id="prevMonthBtn" type="button">‹</button>
+          <strong id="monthTitle">2026-02</strong>
+          <button id="nextMonthBtn" type="button">›</button>
+        </div>
+        <div class="weekday-head">
+          <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+        </div>
+        <div class="date-grid" id="dateGrid"></div>
+        <div class="date-modal-foot">
+          <button id="cancelDateBtn" type="button">取消</button>
+          <button id="todayDateBtn" type="button">今天</button>
+        </div>
+      </div>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
+</html>
