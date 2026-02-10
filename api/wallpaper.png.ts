@@ -59,6 +59,7 @@ export default function handler(req: Request) {
   const startParam = searchParams.get("start") || "";
   const titleParam = (searchParams.get("title") || "").trim();
   const modelParam = searchParams.get("model") || "iphone-15";
+  const debug = searchParams.get("debug") === "1";
   const model = MODEL_SIZE[modelParam] ? modelParam : "iphone-15";
   const size = MODEL_SIZE[model];
 
@@ -140,18 +141,32 @@ export default function handler(req: Request) {
     "div",
     {
       style: {
-        width: "100%",
-        height: "100%",
+        width: size.width,
+        height: size.height,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "flex-start",
-        background: "#0f1013",
+        backgroundColor: "#0f1013",
         color: "#fafafa",
         fontFamily: "ui-sans-serif, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
       }
     },
-    h("div", { style: { height: size.height * 0.42 } }),
+    h("div", { style: { height: Math.round(size.height * 0.34), display: "flex" } }),
+    debug
+      ? h(
+          "div",
+          {
+            style: {
+              fontSize: 72,
+              color: "#ff7f39",
+              display: "flex",
+              marginBottom: 24
+            }
+          },
+          "API OK"
+        )
+      : null,
     h(
       "div",
       { style: { fontSize: 54, color: "#d8dde5", marginBottom: 14, display: "flex" } },
@@ -162,7 +177,18 @@ export default function handler(req: Request) {
       { style: { fontSize: 32, color: "#8a8f98", marginBottom: 30, display: "flex" } },
       `${fmt(start)} - ${fmt(end)}`
     ),
-    h("div", { style: { display: "flex", flexDirection: "column", gap: 14 } }, ...rows),
+    h(
+      "div",
+      {
+        style: {
+          display: "flex",
+          flexDirection: "column",
+          gap: 14,
+          backgroundColor: "#0f1013"
+        }
+      },
+      ...rows
+    ),
     h(
       "div",
       { style: { marginTop: 42, color: "#ff8a47", fontSize: 44, display: "flex" } },
