@@ -41,24 +41,23 @@ function formatDate(date) {
   return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
 }
 
-function parseColor(hex) {
-  return Jimp.cssColorToHex(hex);
+function color(r, g, b, a = 255) {
+  return Jimp.rgbaToInt(r, g, b, a);
 }
 
-function circleImage(size, colorHex) {
+function circleImage(size, rgbaInt) {
   const img = new Jimp(size, size, 0x00000000);
   const r = size / 2;
   const rr = r * r;
-  img.scan(0, 0, size, size, function scan(x, y, idx) {
-    const dx = x + 0.5 - r;
-    const dy = y + 0.5 - r;
-    if (dx * dx + dy * dy <= rr) {
-      this.bitmap.data[idx + 0] = (colorHex >> 24) & 255;
-      this.bitmap.data[idx + 1] = (colorHex >> 16) & 255;
-      this.bitmap.data[idx + 2] = (colorHex >> 8) & 255;
-      this.bitmap.data[idx + 3] = colorHex & 255;
+  for (let y = 0; y < size; y += 1) {
+    for (let x = 0; x < size; x += 1) {
+      const dx = x + 0.5 - r;
+      const dy = y + 0.5 - r;
+      if (dx * dx + dy * dy <= rr) {
+        img.setPixelColor(rgbaInt, x, y);
+      }
     }
-  });
+  }
   return img;
 }
 
@@ -85,7 +84,7 @@ module.exports = async function handler(req, res) {
     const left = TOTAL_DAYS - elapsed;
     const percent = Math.round((elapsed / TOTAL_DAYS) * 100);
 
-    const img = new Jimp(size.width, size.height, parseColor("#0f1013ff"));
+    const img = new Jimp(size.width, size.height, color(15, 16, 19, 255));
     const font64 = await Jimp.loadFont(Jimp.FONT_SANS_64_WHITE);
     const font32 = await Jimp.loadFont(Jimp.FONT_SANS_32_WHITE);
     const font16 = await Jimp.loadFont(Jimp.FONT_SANS_16_WHITE);
@@ -136,9 +135,9 @@ module.exports = async function handler(req, res) {
     const boardLeft = Math.floor((size.width - boardWidth) / 2);
     const boardTop = topOffset + 170;
 
-    const dotPast = circleImage(dotSize, parseColor("#f4f4f4ff"));
-    const dotFuture = circleImage(dotSize, parseColor("#3d4046ff"));
-    const dotToday = circleImage(dotSize, parseColor("#ff7f39ff"));
+    const dotPast = circleImage(dotSize, color(244, 244, 244, 255));
+    const dotFuture = circleImage(dotSize, color(61, 64, 70, 255));
+    const dotToday = circleImage(dotSize, color(255, 127, 57, 255));
 
     for (let row = 0; row < TOTAL_ROWS; row += 1) {
       const isReview = row === TOTAL_WEEKS;
